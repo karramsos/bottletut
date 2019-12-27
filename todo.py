@@ -34,6 +34,6 @@ def new_item():
     else:
         return template('new_task.tpl')
 
-@route('/edit/<no:int>', method='GET')
+#@route('/edit/<no:int>', method='GET')
 
 run(host='localhost', port =8080, debug=True, reloader=True)
