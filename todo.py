@@ -1,5 +1,5 @@
 import sqlite3
-from bottle import route, run, debug, template, request
+from bottle import route, run, debug, template, request, static_file, error 
 
 @route('/')
 def index():
@@ -73,5 +73,28 @@ def show_item(item):
     else:
         return 'Task: %s' % result[0]
         
+@route('/help')
+def help():
+    return static_file('help.html', root='.')
+
+@route('/json<json:re:[0-9]+>')
+def show_json(json):
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    c.execute("SELECT task FROM todo WHERE id LIKE ?", (json,))   
+    result = c.fetchall()
+    c.close()
+
+    if not result:
+        return {'task': 'This item number does not exist!'}
+    else:
+        return {'task': result[0]}
+
+@error(404)
+def mistake404(code):
+    return('The page does not exist!')
+@error(403)
+def mistake403(code):
+    return('The parameter is wrong!')
 
 run(host='localhost', port =8080, debug=True, reloader=True)
