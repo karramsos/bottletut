@@ -92,7 +92,7 @@ def show_json(json):
 
 @error(404)
 def mistake404(code):
-    return('The page does not exist!')
+    return static_file('error.html', root='.')
 @error(403)
 def mistake403(code):
     return('The parameter is wrong!')
